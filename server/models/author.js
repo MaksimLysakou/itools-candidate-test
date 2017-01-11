@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
+const Book = require('./book.js');
+
 let Author = Schema({
     firstName : { type: String, required: true },
     secondName : { type: String, required: true },
-    birthDate : { type: Date, required: true }
+    birthDate : { type: Date, required: true },
+    book : [{ type:Schema.ObjectId, ref:"Book" }]
 });
-//,
-//book : [{ type: Schema.Types.ObjectId, ref: BookSchema }]
 
-module.exports = Author; //db.model('Author', Author);
+module.exports = mongoose.model('Author', Author);
