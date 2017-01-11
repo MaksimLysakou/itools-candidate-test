@@ -1,15 +1,17 @@
 const vm = this;
 const mongoose = require('mongoose');
-const Author = require('../models/author.js');
-let db = undefined;
+const localConfig = require('../config');
 
 
 /**
  * Data Access Layer
  *
  * @constructor
+ * @param {Object} config - database config
  */
-function DAO() {}
+function DAO(config) {
+    vm.config = config;
+}
 
 
 /**
@@ -19,18 +21,23 @@ function DAO() {}
  * @returns {void}
  */
 DAO.prototype.init = function (data, callback) {
+    /**
+     * DB connection
+     */
+    const connectionConfig = `mongodb://${vm.config.host}:${vm.config.port}/${vm.config.database}`;
 
-    let author = new Author({
-        firstName: 'Maxim',
-        secondName: 'Lysakov',
-        birthDate: new Date('October 09, 1996 00:00:00')
-    });
+    mongoose.Promise = global.Promise;
+    mongoose.connect(connectionConfig);
+    const db = mongoose.connection;
 
-    author.save(function() {
-        console.log('ok');
-    });
+    db.on('error', console.error.bind(console, 'connection error:'));
 
-    //TODO create instance and load data
+    if(localConfig.application.DEBUG === true) {
+        db.on('open', function () {
+            console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`)
+        })
+    }
+
     callback && callback();
 };
 
@@ -41,9 +48,6 @@ DAO.prototype.init = function (data, callback) {
  */
 DAO.prototype.clear = function(callback) {
     //TODO clear database
-    db.collectionNames(function (err, names) {
-        console.log(names); // [{ name: 'dbname.myCollection' }]
-    });
 
     callback && callback();
 };
