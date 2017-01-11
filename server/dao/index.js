@@ -1,14 +1,16 @@
-//TODO implement Data Access Layer
+const vm = this;
+const mongoose = require('mongoose');
+const Author = require('../models/author.js');
+let db = undefined;
+
 
 /**
  * Data Access Layer
  *
  * @constructor
- * @param {Object} config - database config
  */
-function DAO(config) {
-    //TODO init database
-}
+function DAO() {}
+
 
 /**
  * Create database instance and load init data
@@ -17,6 +19,17 @@ function DAO(config) {
  * @returns {void}
  */
 DAO.prototype.init = function (data, callback) {
+
+    let author = new Author({
+        firstName: 'Maxim',
+        secondName: 'Lysakov',
+        birthDate: new Date('October 09, 1996 00:00:00')
+    });
+
+    author.save(function() {
+        console.log('ok');
+    });
+
     //TODO create instance and load data
     callback && callback();
 };
@@ -28,6 +41,10 @@ DAO.prototype.init = function (data, callback) {
  */
 DAO.prototype.clear = function(callback) {
     //TODO clear database
+    db.collectionNames(function (err, names) {
+        console.log(names); // [{ name: 'dbname.myCollection' }]
+    });
+
     callback && callback();
 };
 

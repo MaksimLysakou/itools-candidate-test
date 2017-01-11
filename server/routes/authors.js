@@ -6,7 +6,9 @@ const controller = require('../controllers/authors');
 const router = express.Router();
 
 // TODO Add other author routes
-//router.get('/:id', controller.getAuthorById);
+
+router.get('/', controller.getAuthors);
+router.get('/:id', controller.getAuthorById);
 
 module.exports = router;
 
