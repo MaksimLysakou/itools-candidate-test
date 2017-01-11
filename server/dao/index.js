@@ -1,6 +1,8 @@
 const vm = this;
 const mongoose = require('mongoose');
 const localConfig = require('../config');
+const Author = require('../models/author.js');
+const Book = require('../models/book.js');
 
 
 /**
@@ -37,6 +39,43 @@ DAO.prototype.init = function (data, callback) {
             console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`)
         })
     }
+
+    /**
+     * Entities creation
+     */
+
+    let firstAuthor = new Author({
+        firstName : "Petka",
+        secondName : "vasiliev",
+        birthDate : new Date('December 12, 1996'),
+    });
+
+    let secondAuthor = new Author({
+        firstName : "Maxim",
+        secondName : "Lysakov",
+        birthDate : new Date('October 09, 1996'),
+    });
+
+    firstAuthor.save();
+    secondAuthor.save();
+
+    let perfectBook = new Book({
+        name : "Best book ever!",
+        publishing : "Moskow best publishing",
+        ebook : false,
+        year : 2017,
+        isbn : "Sorry, what?",
+        pages : 10000
+    });
+
+    perfectBook.author.push(firstAuthor);
+    perfectBook.author.push(secondAuthor);
+
+    perfectBook.save();
+
+
+
+
 
     callback && callback();
 };
