@@ -4,7 +4,7 @@ module.exports = {
     connection: {
         host: "localhost",
         port: 27017,
-        database: "bookstore"
+        name: "bookstore"
     },
     application: {
         port: 3000,
