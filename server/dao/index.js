@@ -1,8 +1,9 @@
-const vm = this;
 const mongoose = require('mongoose');
 const localConfig = require('../config');
 const Author = require('../models/author.js');
 const Book = require('../models/book.js');
+
+const vm = this;
 
 
 /**
@@ -26,53 +27,67 @@ DAO.prototype.init = function (data, callback) {
     /**
      * DB connection
      */
-    const connectionConfig = `mongodb://${vm.config.host}:${vm.config.port}/${vm.config.database}`;
+    const connectionConfig = `mongodb://${vm.config.host}:${vm.config.port}/${vm.config.name}`;
 
     mongoose.Promise = global.Promise;
-    mongoose.connect(connectionConfig);
-    const db = mongoose.connection;
 
-    db.on('error', console.error.bind(console, 'connection error:'));
+    if(mongoose.connection) {
+        mongoose.connection.close(function (err) {
+            mongoose.connect(connectionConfig);
+            vm.db = mongoose.connection;
 
-    if(localConfig.application.DEBUG === true) {
-        db.on('open', function () {
-            console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`)
-        })
+            vm.db.on('error', () => console.error(`[ERROR]: Error during connection to ${connectionConfig}`));
+
+            localConfig.application.DEBUG && vm.db.on('open', () => {
+                    console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`);
+                });
+        });
+    } else {
+        const db = mongoose.connection;
+
+        vm.db.on('error', () => console.error(`[ERROR]: Error during connection to ${connectionConfig}`));
+
+        localConfig.application.DEBUG && vm.db.on('open', () => {
+             console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`);
+        });
     }
+
+
 
     /**
      * Entities creation
      */
 
-    let firstAuthor = new Author({
-        firstName : "Petka",
-        secondName : "vasiliev",
-        birthDate : new Date('December 12, 1996'),
-    });
-
-    let secondAuthor = new Author({
-        firstName : "Maxim",
-        secondName : "Lysakov",
-        birthDate : new Date('October 09, 1996'),
-    });
-
-    firstAuthor.save();
-    secondAuthor.save();
-
-    let perfectBook = new Book({
-        name : "Best book ever!",
+    let amazingBook = new Book({
+        name : "Amazing book!",
         publishing : "Moskow best publishing",
         ebook : false,
-        year : 2017,
-        isbn : "Sorry, what?",
-        pages : 10000
+        year : 2014,
+        isbn : "111-222-333",
+        pages : 123
     });
 
-    perfectBook.author.push(firstAuthor);
-    perfectBook.author.push(secondAuthor);
+    let smallBook = new Book({
+        name : "Too small book!",
+        publishing : "Moskow best publishing",
+        ebook : false,
+        year : 2013,
+        isbn : "331-222-333",
+        pages : 10
+    });
 
-    perfectBook.save();
+    amazingBook.save(() => smallBook.save( () => {
+        let firstAuthor = new Author({
+            firstName : "Nikolay",
+            secondName : "Vasiliev",
+            birthDate : new Date('December 28, 1944'),
+        });
 
+        firstAuthor.book.push(amazingBook);
+        firstAuthor.book.push(smallBook);
+
+        firstAuthor.save();
+    }));
 
 
 
@@ -86,7 +101,12 @@ DAO.prototype.init = function (data, callback) {
  * @returns {void}
  */
 DAO.prototype.clear = function(callback) {
-    //TODO clear database
+    mongoose.connection.collections['authors'].drop( function(err) {
+        err && console.error(`[ERROR]: Error during dropping authors collection`);
+    });
+    mongoose.connection.collections['books'].drop( function(err) {
+        err && console.error(`[ERROR]: Error during dropping books collection`);
+    });
 
     callback && callback();
 };

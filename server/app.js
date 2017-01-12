@@ -36,7 +36,7 @@ app.use('/api/books', books);
 /**
  * Init database
  */
-dao.init({/*init data*/}, (err) => {
+dao.clear(dao.init({/*init data*/}, (err) => {
 
     if (err) {
         console.error(err);
@@ -47,6 +47,6 @@ dao.init({/*init data*/}, (err) => {
     app.listen(localConfig.application.port, function () {
         console.log(`[INFO] : App listening on port ${localConfig.application.port}!`);
     });
-});
+}));
 
 module.exports = app;
