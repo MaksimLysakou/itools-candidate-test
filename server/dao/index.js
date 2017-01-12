@@ -16,14 +16,12 @@ function DAO(config) {
     vm.config = config;
 }
 
-
 /**
- * Create database instance and load init data
- * @param {Object} data - init database data
+ * Establish connection to database. If connection already exists reopen it.
+ *
  * @param {Function} callback - two params err, callback result
- * @returns {void}
  */
-DAO.prototype.init = function (data, callback) {
+function connect(callback) {
     /**
      * DB connection
      */
@@ -39,8 +37,8 @@ DAO.prototype.init = function (data, callback) {
             vm.db.on('error', () => console.error(`[ERROR]: Error during connection to ${connectionConfig}`));
 
             localConfig.application.DEBUG && vm.db.on('open', () => {
-                    console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`);
-                });
+                console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`);
+            });
         });
     } else {
         const db = mongoose.connection;
@@ -48,51 +46,34 @@ DAO.prototype.init = function (data, callback) {
         vm.db.on('error', () => console.error(`[ERROR]: Error during connection to ${connectionConfig}`));
 
         localConfig.application.DEBUG && vm.db.on('open', () => {
-             console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`);
+            console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`);
         });
     }
 
+    callback && callback();
+}
 
+/**
+ * Create database instance and load init data
+ * @param {Object} data - init database data
+ * @param {Function} callback - two params err, callback result
+ * @returns {void}
+ */
+DAO.prototype.init = function (data, callback) {
 
-    /**
-     * Entities creation
-     */
-
-    let amazingBook = new Book({
-        name : "Amazing book!",
-        publishing : "Moskow best publishing",
-        ebook : false,
-        year : 2014,
-        isbn : "111-222-333",
-        pages : 123
-    });
-
-    let smallBook = new Book({
-        name : "Too small book!",
-        publishing : "Moskow best publishing",
-        ebook : false,
-        year : 2013,
-        isbn : "331-222-333",
-        pages : 10
-    });
-
-    amazingBook.save(() => smallBook.save( () => {
-        let firstAuthor = new Author({
-            firstName : "Nikolay",
-            secondName : "Vasiliev",
-            birthDate : new Date('December 28, 1944'),
+    connect( () => {
+        /**
+         * Entities creation
+         */
+        data.forEach(function (element) {
+            mongoose.connection.collections[element.name].insert(element.rows, function(err) {
+                err && console.error(`[ERROR]: Error during inserting ${element.rows.length} elements
+                                                                                        to ${element.name} collection`);
+            });
         });
 
-        firstAuthor.book.push(amazingBook);
-        firstAuthor.book.push(smallBook);
-
-        firstAuthor.save();
-    }));
-
-
-
-
-    callback && callback();
+        callback && callback();
+    });
 };
 
 /**

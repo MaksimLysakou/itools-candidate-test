@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 
 
 let Author = Schema({
+    email: { type: String, unique: true, required: true },
     firstName : { type: String, required: true },
     secondName : { type: String, required: true },
     birthDate : { type: Date, required: true },
