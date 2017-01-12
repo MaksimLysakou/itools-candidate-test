@@ -21,7 +21,7 @@ function DAO(config) {
  *
  * @param {Function} callback - two params err, callback result
  */
-function connect(callback) {
+DAO.prototype.connect = function(callback) {
     /**
      * DB connection
      */
@@ -29,25 +29,26 @@ function connect(callback) {
 
     mongoose.Promise = global.Promise;
 
-    if(mongoose.connection) {
-        mongoose.connection.close(function (err) {
-            mongoose.connect(connectionConfig);
-            vm.db = mongoose.connection;
-
-            vm.db.on('error', () => console.error(`[ERROR]: Error during connection to ${connectionConfig}`));
-
-            localConfig.application.DEBUG && vm.db.on('open', () => {
-                console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`);
-            });
-        });
-    } else {
-        const db = mongoose.connection;
+    function unsafeConnect(callback) {
+        mongoose.connect(connectionConfig);
+        vm.db = mongoose.connection;
 
         vm.db.on('error', () => console.error(`[ERROR]: Error during connection to ${connectionConfig}`));
 
         localConfig.application.DEBUG && vm.db.on('open', () => {
             console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`);
         });
+
+        callback && callback();
+    }
+
+    if(mongoose.connection) {
+        mongoose.connection.close(function (err) {
+            err && console.error(`[ERROR]: Error during close connection`);
+            unsafeConnect();
+        });
+    } else {
+        unsafeConnect();
     }
 
     callback && callback();
@@ -61,19 +62,14 @@ function connect(callback) {
  */
 DAO.prototype.init = function (data, callback) {
 
-    connect( () => {
-        /**
-         * Entities creation
-         */
-        data.forEach(function (element) {
-            mongoose.connection.collections[element.name].insert(element.rows, function(err) {
-                err && console.error(`[ERROR]: Error during inserting ${element.rows.length} elements
-                                                                                        to ${element.name} collection`);
-            });
+    data && data.forEach(function (element) {
+        mongoose.connection.collections[element.name].insert(element.rows, function(err) {
+            err && console.error(`[ERROR]: Error during inserting ${element.rows.length} elements
+                                                               to ${element.name} collection`);
         });
-
-        callback && callback();
     });
+
+    callback && callback();
 };
 
 /**
