@@ -6,6 +6,7 @@ const Schema = mongoose.Schema;
 
 
 let Book = Schema({
+    _id: { type: Number, unique: true, required: true },
     name : { type: String, required: true },
     publishing : { type: String, required: true },
     ebook : { type: Boolean, required: true },
