@@ -1,9 +1,10 @@
-const mongoose = require('mongoose');
+let mongoose = require('mongoose');
 const localConfig = require('../config');
-const Author = require('../models/author.js');
-const Book = require('../models/book.js');
+
+const DEBUG = localConfig.application.DEBUG;
 
 const vm = this;
+vm.db = undefined;
 
 
 /**
@@ -25,34 +26,34 @@ DAO.prototype.connect = function(callback) {
     /**
      * DB connection
      */
-    const connectionConfig = `mongodb://${vm.config.host}:${vm.config.port}/${vm.config.name}`;
 
-    mongoose.Promise = global.Promise;
+    function unsafeConnect() {
+        const connectionConfig = `mongodb://${vm.config.host}:${vm.config.port}/${vm.config.name}`;
 
-    function unsafeConnect(callback) {
+        mongoose.Promise = global.Promise;
         mongoose.connect(connectionConfig);
-        vm.db = mongoose.connection;
 
-        vm.db.on('error', () => console.error(`[ERROR]: Error during connection to ${connectionConfig}`));
+        mongoose.connection.on('error', () => console.error(`[ERROR]: Error during connection to ${connectionConfig}`));
 
-        localConfig.application.DEBUG && vm.db.on('open', () => {
+        DEBUG && mongoose.connection.on('open', () => {
             console.log(`[DEBUG]: Successfully connected to ${connectionConfig}`);
         });
 
-        callback && callback();
-    }
-
-    if(mongoose.connection) {
-        mongoose.connection.close(function (err) {
-            err && console.error(`[ERROR]: Error during close connection`);
-            unsafeConnect();
+        mongoose.connection.on('open', () => {
+            vm.db = mongoose.connection;
+            callback && callback();
         });
-    } else {
-        unsafeConnect();
+
     }
 
-    callback && callback();
-}
+    if(mongoose.connection.readyState === 1 ||     // 1 - connecting
+       mongoose.connection.readyState === 2 ) {    // 2 - connected
+        // Do nothing because we already connected
+        callback && callback();
+    } else {
+        unsafeConnect(callback);
+    }
+};
 
 /**
  * Create database instance and load init data
@@ -62,15 +63,60 @@ DAO.prototype.connect = function(callback) {
  */
 DAO.prototype.init = function (data, callback) {
 
-    data && data.forEach(function (element) {
-        mongoose.connection.collections[element.name].insert(element.rows, function(err) {
-            err && console.error(`[ERROR]: Error during inserting ${element.rows.length} elements
-                                                               to ${element.name} collection`);
+    if(data.collections instanceof Array) {
+        console.error(`Try to init ${data.collections.length}`);
+
+        data.collections.forEach(function (element) {
+            vm.db.collection(element.name).insert(element.rows, function (err) {
+                err && console.error(`[ERROR]: Error during inserting ${element.rows.length} elements to ${element.name} collection`);
+                DEBUG && !err && console.error(`[INFO] : Success inserting ${element.rows.length} elements to ${element.name} collection`);
+            });
         });
-    });
+    }
 
     callback && callback();
 };
+
+
+/**
+ * Clear authors collection
+ * @param {Function} callback - two params err, callback result
+ * @returns {void}
+ */
+function clearAuthors(callback) {
+    vm.db.db.listCollections({name: 'authors'})
+        .next(function(err, collinfo) {
+            if (collinfo) {
+                vm.db.collection('authors').drop( function(err) {
+                    DEBUG && err && console.error(`[ERROR]: Error during dropping authors collection: ${err}`);
+                    DEBUG && !err && console.error(`[INFO] : Success dropping authors collection`);
+                });
+            }
+
+            callback && callback();
+        });
+}
+
+
+/**
+ * Clear books collection
+ * @param {Function} callback - two params err, callback result
+ * @returns {void}
+ */
+function clearBooks(callback) {
+    vm.db.db.listCollections({name: 'books'})
+        .next(function (err, collinfo) {
+            if (collinfo) {
+                vm.db.collection('books').drop(function (err) {
+                    DEBUG && err && console.error(`[ERROR]: Error during dropping books collection: ${err}`);
+                    DEBUG && !err && console.error(`[INFO] : Success dropping books collection`);
+                });
+            }
+
+            callback && callback();
+        });
+}
+
 
 /**
  * Clear database
@@ -78,14 +124,12 @@ DAO.prototype.init = function (data, callback) {
  * @returns {void}
  */
 DAO.prototype.clear = function(callback) {
-    mongoose.connection.collections['authors'].drop( function(err) {
-        err && console.error(`[ERROR]: Error during dropping authors collection`);
-    });
-    mongoose.connection.collections['books'].drop( function(err) {
-        err && console.error(`[ERROR]: Error during dropping books collection`);
-    });
 
-    callback && callback();
+    clearAuthors(() => {
+        clearBooks(() => {
+            callback && callback();
+        })
+    })
 };
 
 module.exports = DAO;
