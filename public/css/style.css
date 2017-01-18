@@ -53,13 +53,14 @@ body {
     align-items: center;
     flex-wrap: nowrap;
 
-    min-height: 40px;
+    height: 42px;
     width: 100%;
 
     border-bottom: 2px black solid;
 
     background-color: #652f00;
 }
+
 
 .navElement a {
     color: #ffdec7;
@@ -77,7 +78,7 @@ body {
     overflow-y: auto;
 
     width: calc(100% - 2 * 15px);
-    height: calc( 100vh - 40px - 140px - 2 * 15px - 4px);
+    height: calc( 100vh - 40px - 140px - 2 * 15px - 6px);
 
     background-color: #ffdec7;
 }

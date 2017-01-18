@@ -1,4 +1,5 @@
 import React, { PropTypes, Component } from 'react'
+import { Link } from 'react-router'
 
 export default class Navigation extends Component {
     setActiveTab(e) {
@@ -15,14 +16,14 @@ export default class Navigation extends Component {
             navTemplate = links.map((item, index) => {
                 return (
                     <div key={index} className='navElement'>
-                        <a
+                        <Link
                             id={"navButton" + index}
-                            href={item.href}
+                            to={item.href}
                             onClick={this.setActiveTab.bind(this)}
                             className={(item.active ? "active" : "")}
                         >
-                            {item.label} {item.active}
-                        </a>
+                            {item.label}
+                        </Link>
                     </div>
                 )
             });

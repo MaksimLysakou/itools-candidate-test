@@ -1,32 +1,17 @@
 import React from 'react'
 import { render } from 'react-dom'
-import { Provider } from 'react-redux'
-import Navigation from './containers/navigationContainer'
-import configureStore from './store/configureStore'
 
-import Home from './containers/navigationContainer'     //TODO add Home container
-import Books from './containers/navigationContainer'    //TODO add Books container
-import Authors from './containers/navigationContainer'  //TODO add Authors container
+import Home from './containers/homeContainer'
+import Books from './containers/booksContainer'
+import Authors from './containers/authorsContainer'
 
-
-import { Router, Route, IndexRoute, browserHistory } from 'react-router'
-
-const store = configureStore();
+import { Router, Route, browserHistory } from 'react-router'
 
 render(
-    <Provider store={store}>
-        <Navigation />
-    </Provider>,
-    document.getElementById('navMenu')
+        <Router history={browserHistory}>
+            <Route path='/' component={Home} />
+            <Route path='/books' component={Books} />
+            <Route path='/authors' component={Authors} />
+        </Router>,
+    document.getElementById('root')
 );
-
-render(
-    <Router history={browserHistory}>
-        <Route path='/' component={Home}>
-            <IndexRoute component={Home} />
-            <Route path='books' component={Books} />
-            <Route path='authors' component={Authors} />
-        </Route>
-    </Router>,
-    document.getElementById('content')
-)
