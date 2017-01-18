@@ -66,6 +66,12 @@ body {
     text-decoration: none;
 }
 
+.navElement .active {
+    color: #ffdec7;
+    text-decoration: none;
+    font-weight: bold;
+}
+
 .contentContainer {
     padding: 15px;
     overflow-y: auto;

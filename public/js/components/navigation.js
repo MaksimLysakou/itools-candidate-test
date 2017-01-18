@@ -1,33 +1,40 @@
-import React, { Component } from 'react'
-import { connect } from 'react-redux'
+import React, { PropTypes, Component } from 'react'
 
-class nav extends Component {
+export default class Navigation extends Component {
+    setActiveTab(e) {
+        const id = +e.target.id.substring("navButton".length);
+        this.props.setActive(id);
+    }
+
     render() {
-        const links = this.props.navigation.links;
+        const links = this.props.links;
         let navTemplate = "";
 
         if (links.length > 0) {
 
-            navTemplate = links.map(function (item, index) {
+            navTemplate = links.map((item, index) => {
                 return (
                     <div key={index} className='navElement'>
-                        <a href={item.href}> {item.label} </a>
+                        <a
+                            id={"navButton" + index}
+                            href={item.href}
+                            onClick={this.setActiveTab.bind(this)}
+                            className={(item.active ? "active" : "")}
+                        >
+                            {item.label} {item.active}
+                        </a>
                     </div>
                 )
             });
         }
 
-
-        return  <div className="navContainer">
+        return  <div className='navContainer'>
                     {navTemplate}
                 </div>
     }
 }
 
-function mapStateToProps (state) {
-    return {
-        navigation: state.navigation
-    }
-}
-
-export default connect(mapStateToProps)(nav)
+Navigation.propTypes = {
+    links: PropTypes.array.isRequired,
+    setActive: PropTypes.func.isRequired
+};

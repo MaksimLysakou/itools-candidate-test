@@ -1,3 +1,5 @@
+import { SET_ACTIVE } from '../constants/navigation'
+
 const initialState = {
     links: [
         {
@@ -7,17 +9,38 @@ const initialState = {
         },
         {
             label: "Авторы",
-            href: "/#",
+            href: "/authors",
             active: false
         },
         {
             label: "Книги",
-            href: "/#",
+            href: "/books",
             active: false
         }
     ]
 };
 
-export default function navState(state = initialState) {
-    return state
+export default function navState(state = initialState, action) {
+    switch (action.type) {
+        case SET_ACTIVE:
+            let result = Object.assign({}, state);
+
+            console.log("Test:");
+
+            result.links.forEach( (element) => {
+                element.active = false;
+                console.log(element);
+            });
+
+            console.log(result.links, action.payload);
+
+            result.links[action.payload].active = true;
+
+            console.log(result.links);
+
+            return result;
+
+        default:
+            return state;
+    }
 }
