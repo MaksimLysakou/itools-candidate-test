@@ -13,8 +13,7 @@ export default class Navigation extends Component {
 
         if (links.length > 0) {
 
-            navTemplate = links.map((item, index) => {
-                return (
+            navTemplate = links.map((item, index) => (
                     <div key={index} className='navElement'>
                         <Link
                             id={"navButton" + index}
@@ -25,8 +24,7 @@ export default class Navigation extends Component {
                             {item.label}
                         </Link>
                     </div>
-                )
-            });
+                ));
         }
 
         return  <div className='navContainer'>

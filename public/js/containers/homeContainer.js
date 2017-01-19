@@ -7,7 +7,7 @@ import { Provider } from 'react-redux'
 import configureStore from '../store/configureStore'
 const store = configureStore();
 
-export default class nav extends Component {
+export default class home extends Component {
 
     render() {
         return  <div className="mainContainer">

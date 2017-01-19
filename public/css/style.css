@@ -74,11 +74,17 @@ body {
 }
 
 .contentContainer {
-    padding: 15px;
     overflow-y: auto;
 
-    width: calc(100% - 2 * 15px);
+    padding: 30px;
+    width: calc(100% - 2 * 30px);
     height: calc( 100vh - 40px - 140px - 2 * 15px - 6px);
 
     background-color: #ffdec7;
+
+    margin: auto;
+}
+
+.invisible {
+    opacity: 0;
 }

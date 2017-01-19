@@ -23,7 +23,7 @@ const initialState = {
 export default function navState(state = initialState, action) {
     switch (action.type) {
         case SET_ACTIVE:
-            let result = Object.assign({}, state);
+            let result = Object.assign({}, state); //spread operator
 
             result.links.forEach( (element) => {
                 element.active = false;

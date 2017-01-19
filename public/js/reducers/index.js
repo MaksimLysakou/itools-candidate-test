@@ -1,8 +1,9 @@
 import { combineReducers } from 'redux'
-import content from './contentReducer'
 import navigation from './navReducer'
+import authors from './authorsReducer'
+
 
 export default combineReducers({
-    content,
-    navigation
+    navigation,
+    authors
 })
