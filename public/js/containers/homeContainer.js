@@ -16,7 +16,9 @@ export default class nav extends Component {
                         <Navigation />
                     </Provider>
                     <div className="contentContainer">
-                        This is a home page. There you can find nothing!
+                        <h2> Welcome to our Book Store! </h2>
+                        <span> There you can find a lot of useful information about books, their authors etc. </span>
+                        <h4> Have a fun! </h4>
                     </div>
                 </div>
     }
