@@ -1,4 +1,4 @@
-import { SET_ACTIVE } from '../constants/navigation'
+import { SET_ACTIVE } from '../constants/navigation.js'
 
 export function setActive(tab) {
 

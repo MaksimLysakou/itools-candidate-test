@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
-import navigation from './navReducer'
-import authors from './authorsReducer'
+import navigation from './navReducer.js'
+import authors from './authorsReducer.js'
 
 
 export default combineReducers({

@@ -1,27 +1,19 @@
 import React from 'react'
 import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { Router, browserHistory } from 'react-router'
 
-import Home from './containers/homeContainer'
-import Books from './containers/booksContainer'
-import Authors from './containers/authorsCointainer'
+import routes from './routes.jsx';
 
-
-import { Router, Route, browserHistory, IndexRoute } from 'react-router'
+import configureStore from './store/configureStore.js'
+const store = configureStore();
 
 render(
+    <Provider store={store}>
         <Router history={browserHistory}>
-            <Route path='/' component={Home} />
-            <Route path='/books' component={Books} />
-            <Route path='/authors' component={Authors} />
-        </Router>,
+            {routes}
+        </Router>
+    </Provider>,
 
     document.getElementById('root')
 );
-//
-// {/*<Router history={browserHistory}>
-//  <Route path='/' component={Home}>
-//  <IndexRoute component={Home} />
-//  <Route path='books' component={Books} />
-//  <Route path='authors' component={Authors} />
-//  </Route>
-//  </Router>,*/}

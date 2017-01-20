@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as navigationActions from '../actions/navAction'
-import  Navigation from '../components/navigation'
+
+import * as navigationActions from '../../actions/navActions.js'
+import  Navigation from '../../components/Navigation'
 
 class nav extends Component {
 
@@ -13,16 +14,12 @@ class nav extends Component {
     }
 }
 
-function mapStateToProps (state) {
-    return {
-        navigation: state.navigation
-    }
-}
+const mapStateToProps = (state) => ({
+    navigation: state.navigation
+});
 
-function mapDispatchToProps(dispatch) {
-    return {
-        navActions: bindActionCreators(navigationActions, dispatch)
-    }
-}
+const mapDispatchToProps = (dispatch) => ({
+    navActions: bindActionCreators(navigationActions, dispatch)
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(nav)

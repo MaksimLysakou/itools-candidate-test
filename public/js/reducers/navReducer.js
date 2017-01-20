@@ -1,4 +1,4 @@
-import { SET_ACTIVE } from '../constants/navigation'
+import { SET_ACTIVE } from '../constants/navigation.js'
 
 const initialState = {
     links: [
@@ -23,7 +23,7 @@ const initialState = {
 export default function navState(state = initialState, action) {
     switch (action.type) {
         case SET_ACTIVE:
-            let result = Object.assign({}, state); //spread operator
+            let result = {...state}; //spread operator
 
             result.links.forEach( (element) => {
                 element.active = false;

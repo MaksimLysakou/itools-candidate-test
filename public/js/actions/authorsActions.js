@@ -1,4 +1,4 @@
-import { SAVE_AUTHORS } from '../constants/authors'
+import { SAVE_AUTHORS } from '../constants/authors.js'
 
 export function saveAuthors(authorsList) {
 

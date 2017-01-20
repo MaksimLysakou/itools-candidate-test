@@ -74,15 +74,21 @@ body {
 }
 
 .contentContainer {
-    overflow-y: auto;
-
-    padding: 30px;
-    width: calc(100% - 2 * 30px);
-    height: calc( 100vh - 40px - 140px - 2 * 15px - 6px);
-
+    min-height: 600px;
     background-color: #ffdec7;
+}
 
-    margin: auto;
+.contentElementsContainer {
+    margin: 30px auto auto auto;
+    display: flex;
+    flex-direction: column;
+
+    width: 90%;
+    height: 90%;
+}
+
+.hotContainer {
+    width: 100%;
 }
 
 .invisible {
