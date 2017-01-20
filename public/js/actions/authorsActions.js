@@ -1,4 +1,4 @@
-import { SAVE_AUTHORS, SET_DIRTY } from '../constants/authors.js'
+import { SAVE_AUTHORS, SET_AUTHOR_DIRTY } from '../constants/authors.js'
 
 export function saveAuthors(authorsList) {
 
@@ -10,7 +10,7 @@ export function saveAuthors(authorsList) {
 export function setDirty(isDirty) {
 
     return {
-        type: SET_DIRTY,
+        type: SET_AUTHOR_DIRTY,
         payload: isDirty
     }
 }

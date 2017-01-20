@@ -1,2 +1,2 @@
 export const SAVE_AUTHORS = 'SAVE_AUTHORS';
-export const SET_DIRTY = 'SET_DIRTY';
+export const SET_AUTHOR_DIRTY = 'SET_AUTHOR_DIRTY';

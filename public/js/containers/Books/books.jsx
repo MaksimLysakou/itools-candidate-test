@@ -1,10 +1,30 @@
 import React, { Component } from 'react'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
 
-export default class books extends Component {
+import * as booksActions from '../../actions/booksActions.js'
+import Books from '../../components/Books'
+
+class books extends Component {
 
     render() {
-        return  <div className="contentContainer">
-                    This is a books page. Handsontable will be here.
-                </div>
+        const { booksCollection, isDirty}  = this.props.books;
+        const { saveBooks, setDirty } = this.props.actions;
+        return  <Books
+                    books={booksCollection}
+                    isDirty={isDirty}
+                    saveBooks={saveBooks}
+                    setDirty={setDirty}
+                />
     }
 }
+
+const mapStateToProps = (state) => ({
+    books: state.books
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    actions: bindActionCreators(booksActions, dispatch)
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(books)

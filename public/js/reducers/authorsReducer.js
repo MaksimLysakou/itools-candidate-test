@@ -1,4 +1,4 @@
-import { SAVE_AUTHORS, SET_DIRTY } from '../constants/authors.js'
+import { SAVE_AUTHORS, SET_AUTHOR_DIRTY } from '../constants/authors.js'
 
 const initialState = {
     authorsCollection: [
@@ -98,9 +98,9 @@ export default function authorsState(state = initialState, action) {
 
             return {...state, authorsCollection : action.payload, isDirty: false};
 
-        case SET_DIRTY:
+        case SET_AUTHOR_DIRTY:
 
-            console.log("Set dirty:", action.payload);
+            console.log("Set author dirty:", action.payload);
 
             return {...state, isDirty: action.payload};
 
