@@ -13,9 +13,7 @@ class App extends Component {
             <div className="mainContainer">
                 <Header/>
                 <Navigation />
-                <div className="contentContainer">
-                    {this.props.children}
-                </div>
+                {this.props.children}
             </div>
         );
     }

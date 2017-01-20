@@ -13,18 +13,19 @@ export default class Navigation extends Component {
 
         if (links.length > 0) {
 
-            navTemplate = links.map((item, index) => (
-                    <div key={index} className='navElement'>
-                        <Link
-                            id={"navButton" + index}
-                            to={item.href}
-                            onClick={this.setActiveTab.bind(this)}
-                            className={(item.active ? "active" : "")}
-                        >
-                            {item.label}
-                        </Link>
-                    </div>
-                ));
+            navTemplate = links.map((item, index) => {
+                return (<div key={index} className='navElement'>
+                            <Link
+                                id={"navButton" + index}
+                                to={item.href}
+                                activeClassName='active'
+                                onlyActiveOnIndex={true}
+                                onClick={this.setActiveTab.bind(this)}
+                            >
+                                {item.label}
+                            </Link>
+                        </div>)
+            });
         }
 
         return  <div className='navContainer'>

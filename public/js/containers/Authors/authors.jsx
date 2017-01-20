@@ -8,15 +8,19 @@ import Authors from '../../components/Authors'
 class authors extends Component {
 
     render() {
-        const authorsCollection = this.props.authorsCollection;
-        const { saveAuthors } = this.props.actions;
-        return <Authors authors={authorsCollection} saveAuthors={saveAuthors} />
+        const { authorsCollection, isDirty}  = this.props.authors;
+        const { saveAuthors, setDirty } = this.props.actions;
+        return  <Authors
+                    authors={authorsCollection}
+                    isDirty={isDirty}
+                    saveAuthors={saveAuthors}
+                    setDirty={setDirty}
+                />
     }
 }
 
 const mapStateToProps = (state) => ({
-    authorsCollection: state.authors.authorsCollection,
-    isDirty: state.authors.isDirty
+    authors: state.authors
 });
 
 const mapDispatchToProps = (dispatch) => ({
