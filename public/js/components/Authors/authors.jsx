@@ -23,24 +23,46 @@ export default class Authors extends Component {
     }
 
     customRenderer(instance, td, row, col, prop, value, cellProperties) {
-        let escaped = Handsontable.helper.stringify(value);
-        let text;
+        let idArray;
+        let rootDiv = document.createElement('div');
 
-        text = document.createElement('b');
-        text.innerHTML = escaped;
+        try {
+            idArray = JSON.parse(value);
 
-        Handsontable.Dom.addEvent(text, 'mousedown', function (e){
-            e.preventDefault(); // prevent selection quirk
+            if(!(idArray instanceof Array)) {
+                Handsontable.renderers.TextRenderer.apply(this, arguments);
+                return;
+            }
+
+        } catch (error) {
+            Handsontable.renderers.TextRenderer.apply(this, arguments);
+            return;
+        }
+
+        idArray.forEach( (element) => {
+            this.props.books.forEach( (book) => {
+                if(book["_id"] == element) {
+                    const bookType = ((book["ebook"]) ? "Электронная книга" : "Книга");
+                    rootDiv.innerHTML += `<div class = "subCell">` +
+                                            `${bookType}: <b>${book["name"]}</b> 
+                                             Издательство: ${book["publishing"]} 
+                                             Год выпуска: ${book["year"]} 
+                                             ISBN: ${book["isbn"]} 
+                                             Кол-во страниц: ${book["pages"]}` +
+                                         `</div>`;
+                }
+            })
         });
 
         Handsontable.Dom.empty(td);
-        td.appendChild(text);
+        td.appendChild(rootDiv);
 
         return td;
     }
 
 
     render() {
+
         const vm = this;
         const columnsHeaders = ['Фамилия', 'Имя', 'Дата рождения', 'Email', 'Книги'];
         const columnsType = [
@@ -71,7 +93,7 @@ export default class Authors extends Component {
             },
             {
                 data: 'book',
-                renderer: vm.customRenderer
+                renderer: vm.customRenderer.bind(vm)
             }
         ];
 
@@ -107,5 +129,6 @@ Authors.propTypes = {
     saveAuthors: PropTypes.func.isRequired,
     setDirty: PropTypes.func.isRequired,
     authors: PropTypes.array.isRequired,
+    books: PropTypes.array.isRequired,
     isDirty: PropTypes.bool.isRequired
 };

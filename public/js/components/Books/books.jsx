@@ -22,10 +22,39 @@ export default class Books extends Component {
         }
     }
 
-    setClear() {
-        if(this.props.isDirty) {
-            this.props.setDirty(false);
+    customRenderer(instance, td, row, col, prop, value, cellProperties) {
+        let idArray;
+        let rootDiv = document.createElement('div');
+
+        try {
+            idArray = JSON.parse(value);
+
+            if(!(idArray instanceof Array)) {
+                Handsontable.renderers.TextRenderer.apply(this, arguments);
+                return;
+            }
+
+        } catch (error) {
+            Handsontable.renderers.TextRenderer.apply(this, arguments);
+            return;
         }
+
+        idArray.forEach( (element) => {
+            this.props.authors.forEach( (author) => {
+                if(author["_id"] == element) {
+                    rootDiv.innerHTML += `<div class = "subCell">` +
+                                            `<b>${author["firstName"]} ${author["lastName"]}</b> 
+                                             Дата рождения: ${author["birthDate"]} 
+                                             Email: ${author["email"]}` +
+                                         `</div>`;
+                }
+            })
+        });
+
+        Handsontable.Dom.empty(td);
+        td.appendChild(rootDiv);
+
+        return td;
     }
 
     render() {
@@ -55,7 +84,7 @@ export default class Books extends Component {
             },
             {
                 data: 'author',
-                renderer: "html"
+                renderer: vm.customRenderer.bind(vm)
             }
         ];
 
@@ -89,6 +118,7 @@ export default class Books extends Component {
 Books.propTypes = {
     saveBooks: PropTypes.func.isRequired,
     setDirty: PropTypes.func.isRequired,
+    authors: PropTypes.array.isRequired,
     books: PropTypes.array.isRequired,
     isDirty: PropTypes.bool.isRequired
 };

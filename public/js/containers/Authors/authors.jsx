@@ -9,9 +9,11 @@ class authors extends Component {
 
     render() {
         const { authorsCollection, isDirty}  = this.props.authors;
+        const { booksCollection } = this.props.books;
         const { saveAuthors, setDirty } = this.props.actions;
         return  <Authors
                     authors={authorsCollection}
+                    books={booksCollection}
                     isDirty={isDirty}
                     saveAuthors={saveAuthors}
                     setDirty={setDirty}
@@ -20,7 +22,8 @@ class authors extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    authors: state.authors
+    authors: state.authors,
+    books: state.books
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -3,88 +3,100 @@ import { SAVE_AUTHORS, SET_AUTHOR_DIRTY } from '../constants/authors.js'
 const initialState = {
     authorsCollection: [
         {
-            lastName:"Фамилия один",
-            firstName:"Имя один",
+            _id:1,
+            lastName:"ФамилияОдин",
+            firstName:"ИмяОдин",
             birthDate:'01/01/2001',
             email: "example1@example.com",
-            book: "books list 1"
+            book: "[1,2,3]"
         },
         {
-            lastName:"Фамилия два",
-            firstName:"Имя два",
+            _id:2,
+            lastName:"ФамилияДва",
+            firstName:"ИмяДва",
             birthDate:'02/02/2002',
             email: "example2@example.com",
-            book: "books list 2"
+            book: "[2]"
         },
         {
-            lastName:"Фамилия три",
-            firstName:"Имя три",
+            _id:3,
+            lastName:"ФамилияТри",
+            firstName:"ИмяТри",
             birthDate:'03/03/2003',
             email: "example3@example.com",
-            book: "books list 3"
+            book: "[1,5]"
         },
         {
-            lastName:"Фамилия четыре",
-            firstName:"Имя четыре",
+            _id:4,
+            lastName:"ФамилияЧетыре",
+            firstName:"ИмяЧетыре",
             birthDate:'04/04/2004',
             email: "example4@example.com",
-            book: "books list 4"
+            book: "Отсутствуют"
         },
         {
-            lastName:"Фамилия пять",
-            firstName:"Имя пять",
+            _id:5,
+            lastName:"ФамилияПять",
+            firstName:"ИмяПять",
             birthDate:'05/05/2005',
             email: "example5@example.com",
-            book: "books list 5"
+            book: "[4,5]"
         },
         {
-            lastName:"Фамилия шесть",
-            firstName:"Имя шесть",
+            _id:6,
+            lastName:"ФамилияШесть",
+            firstName:"ИмяШесть",
             birthDate:'06/06/2006',
             email: "example6@example.com",
-            book: "books list 6"
+            book: "[3,4]"
         },
         {
-            lastName:"Фамилия семь",
-            firstName:"Имя семь",
+            _id:7,
+            lastName:"ФамилияСемь",
+            firstName:"ИмяСемь",
             birthDate:'07/07/2007',
             email: "example7@example.com",
-            book: "books list 7"
+            book: "Отсутствуют"
         },
         {
-            lastName:"Фамилия восемь",
-            firstName:"Имя восемь",
+            _id:8,
+            lastName:"ФамилияВосемь",
+            firstName:"ИмяВосемь",
             birthDate:'08/08/2008',
             email: "example8@example.com",
-            book: "books list 8"
+            book: "Отсутствуют"
         },
         {
-            lastName:"Фамилия девять",
-            firstName:"Имя девять",
+            _id:9,
+            lastName:"ФамилияДевять",
+            firstName:"ИмяДевять",
             birthDate:'09/09/2009',
             email: "example9@example.com",
-            book: "books list 9"
+            book: "Отсутствуют"
         },
         {
-            lastName:"Фамилия десять",
-            firstName:"Имя десять",
+            _id:10,
+            lastName:"ФамилияДесять",
+            firstName:"ИмяДесять",
             birthDate:'10/10/2010',
             email: "example10@example.com",
-            book: "books list 10"
+            book: "[1]"
         },
         {
-            lastName:"Фамилия одиннадцать",
-            firstName:"Имя одиннадцать",
+            _id:11,
+            lastName:"ФамилияОдиннадцать",
+            firstName:"ИмяОдиннадцать",
             birthDate:'11/11/2011',
             email: "example11@example.com",
-            book: "books list 11"
+            book: "Отсутствуют"
         },
         {
-            lastName:"Фамилия двенадцать",
-            firstName:"Имя двенадцать",
+            _id:12,
+            lastName:"ФамилияДвенадцать",
+            firstName:"ИмяДвенадцать",
             birthDate:'12/12/2012',
             email: "example12@example.com",
-            book: "<b> books list 12 </b>"
+            book: "Отсутствуют"
         }
        ],
         isDirty: false

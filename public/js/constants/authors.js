@@ -1,3 +1,2 @@
 export const SAVE_AUTHORS = 'SAVE_AUTHORS';
 export const SET_AUTHOR_DIRTY = 'SET_AUTHOR_DIRTY';
-export const GET_BOOK_INFO = 'GET_BOOK_INFO';
