@@ -54,7 +54,8 @@ export default class Books extends Component {
                 type: 'numeric'
             },
             {
-                data: 'author'
+                data: 'author',
+                renderer: "html"
             }
         ];
 
@@ -76,9 +77,7 @@ export default class Books extends Component {
                             stretchH="last"
                             columns={columnsType}
                             columnSorting={true}
-                            manualColumnResize={true}
-                            afterBeginEditing={vm.setDirty.bind(vm)}
-                            afterInit={vm.setClear.bind(vm)}
+                            afterSetDataAtCell={vm.setDirty.bind(vm)}
                         />
                     </div>
                 </div>

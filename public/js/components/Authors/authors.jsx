@@ -22,11 +22,23 @@ export default class Authors extends Component {
         }
     }
 
-    setClear() {
-        if(this.props.isDirty) {
-            this.props.setDirty(false);
-        }
+    customRenderer(instance, td, row, col, prop, value, cellProperties) {
+        let escaped = Handsontable.helper.stringify(value);
+        let text;
+
+        text = document.createElement('b');
+        text.innerHTML = escaped;
+
+        Handsontable.Dom.addEvent(text, 'mousedown', function (e){
+            e.preventDefault(); // prevent selection quirk
+        });
+
+        Handsontable.Dom.empty(td);
+        td.appendChild(text);
+
+        return td;
     }
+
 
     render() {
         const vm = this;
@@ -58,8 +70,8 @@ export default class Authors extends Component {
                 //column is simple text, no special options here
             },
             {
-                data: 'books'
-                //column is simple text, no special options here
+                data: 'book',
+                renderer: vm.customRenderer
             }
         ];
 
@@ -82,8 +94,7 @@ export default class Authors extends Component {
                             columns={columnsType}
                             columnSorting={true}
                             manualColumnResize={true}
-                            afterBeginEditing={vm.setDirty.bind(vm)}
-                            afterInit={vm.setClear.bind(vm)}
+                            afterSetDataAtCell={vm.setDirty.bind(vm)}
                         />
                     </div>
                 </div>

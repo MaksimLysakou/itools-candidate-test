@@ -74,22 +74,14 @@ body {
 }
 
 .contentContainer {
-    position: relative;
     min-height: 600px;
     padding: 20px;
     background-color: #ffdec7;
 }
 
-.hotRootContainer {
-
-    display: flex;
-    width: 100%;
-    height: 100%;
-}
 
 .hotContainer {
     width: 100%;
-    z-index: 0;
 }
 
 .saveBtn {

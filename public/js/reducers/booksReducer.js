@@ -54,15 +54,9 @@ const initialState = {
 export default function booksState(state = initialState, action) {
     switch (action.type) {
         case SAVE_BOOKS:
-
-            console.log("Got new books array:", action.payload);
-
             return {...state, booksCollection : action.payload, isDirty: false};
 
         case SET_BOOK_DIRTY:
-
-            console.log("Set book dirty:", action.payload);
-
             return {...state, isDirty: action.payload};
 
         default:
