@@ -101,3 +101,9 @@ body {
 .invisible {
     display: none;
 }
+
+.subCell {
+    margin: 5px;
+    padding: 3px;
+    border: 1px solid #d58512;
+}
