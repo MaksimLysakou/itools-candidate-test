@@ -29,27 +29,31 @@ export default class Books extends Component {
         try {
             idArray = JSON.parse(value);
 
-            if(!(idArray instanceof Array)) {
-                Handsontable.renderers.TextRenderer.apply(this, arguments);
-                return;
+            if(idArray instanceof Array) {
+
+                idArray.forEach( (element) => {
+                    this.props.authors.forEach( (author) => {
+                        if(author["_id"] == element) {
+                            rootDiv.innerHTML +=    `<div class = "subCell">` +
+                                                       `ID: ${author["_id"]}
+                                                        <b>${author["firstName"]} ${author["lastName"]}</b> 
+                                                        Дата рождения: ${author["birthDate"]} 
+                                                        Email: ${author["email"]}` +
+                                                    `</div>`;
+                        }
+                    })
+                });
+            } else {
+                rootDiv.innerHTML = "Отсутствуют";
+            }
+
+            if( idArray.length == 0 ) {
+                rootDiv.innerHTML = "Отсутствуют";
             }
 
         } catch (error) {
-            Handsontable.renderers.TextRenderer.apply(this, arguments);
-            return;
+            rootDiv.innerHTML = "Отсутствуют";
         }
-
-        idArray.forEach( (element) => {
-            this.props.authors.forEach( (author) => {
-                if(author["_id"] == element) {
-                    rootDiv.innerHTML += `<div class = "subCell">` +
-                                            `<b>${author["firstName"]} ${author["lastName"]}</b> 
-                                             Дата рождения: ${author["birthDate"]} 
-                                             Email: ${author["email"]}` +
-                                         `</div>`;
-                }
-            })
-        });
 
         Handsontable.Dom.empty(td);
         td.appendChild(rootDiv);

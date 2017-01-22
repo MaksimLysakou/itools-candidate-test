@@ -24752,7 +24752,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        routes = _props.routes,
 	        children = _props.children;
 
-	    !history.getCurrentLocation ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, 'You have provided a history object created with history v2.x or ' + 'earlier. This version of React Router is only compatible with v3 ' + 'history objects. Please upgrade to history v3.x.') : (0, _invariant2.default)(false) : void 0;
+	    !history.getCurrentLocation ? process.env.NODE_ENV !== 'production' ? (0, _invariant2.default)(false, 'You have provided a history object created with history v4.x or v2.x ' + 'and earlier. This version of React Router is only compatible with v3 ' + 'history objects. Please change to history v3.x.') : (0, _invariant2.default)(false) : void 0;
 
 	    return (0, _createTransitionManager3.default)(history, (0, _RouteUtils.createRoutes)(routes || children));
 	  },
@@ -29983,22 +29983,25 @@ return /******/ (function(modules) { // webpackBootstrap
 	            try {
 	                idArray = JSON.parse(value);
 
-	                if (!(idArray instanceof Array)) {
-	                    Handsontable.renderers.TextRenderer.apply(this, arguments);
-	                    return;
+	                if (idArray instanceof Array) {
+
+	                    idArray.forEach(function (element) {
+	                        _this2.props.authors.forEach(function (author) {
+	                            if (author["_id"] == element) {
+	                                rootDiv.innerHTML += '<div class = "subCell">' + ('ID: ' + author["_id"] + '\n                                                        <b>' + author["firstName"] + ' ' + author["lastName"] + '</b> \n                                                        \u0414\u0430\u0442\u0430 \u0440\u043E\u0436\u0434\u0435\u043D\u0438\u044F: ' + author["birthDate"] + ' \n                                                        Email: ' + author["email"]) + '</div>';
+	                            }
+	                        });
+	                    });
+	                } else {
+	                    rootDiv.innerHTML = "Отсутствуют";
+	                }
+
+	                if (idArray.length == 0) {
+	                    rootDiv.innerHTML = "Отсутствуют";
 	                }
 	            } catch (error) {
-	                Handsontable.renderers.TextRenderer.apply(this, arguments);
-	                return;
+	                rootDiv.innerHTML = "Отсутствуют";
 	            }
-
-	            idArray.forEach(function (element) {
-	                _this2.props.authors.forEach(function (author) {
-	                    if (author["_id"] == element) {
-	                        rootDiv.innerHTML += '<div class = "subCell">' + ('<b>' + author["firstName"] + ' ' + author["lastName"] + '</b> \n                                             \u0414\u0430\u0442\u0430 \u0440\u043E\u0436\u0434\u0435\u043D\u0438\u044F: ' + author["birthDate"] + ' \n                                             Email: ' + author["email"]) + '</div>';
-	                    }
-	                });
-	            });
 
 	            Handsontable.Dom.empty(td);
 	            td.appendChild(rootDiv);
@@ -77951,23 +77954,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	            try {
 	                idArray = JSON.parse(value);
 
-	                if (!(idArray instanceof Array)) {
-	                    Handsontable.renderers.TextRenderer.apply(this, arguments);
-	                    return;
+	                if (idArray instanceof Array) {
+
+	                    idArray.forEach(function (element) {
+	                        _this2.props.books.forEach(function (book) {
+	                            if (book["_id"] == element) {
+	                                var bookType = book["ebook"] ? "Электронная книга" : "Книга";
+	                                rootDiv.innerHTML += '<div class = "subCell">' + ('ID: ' + book["_id"] + '\n                                                         ' + bookType + ': <b>' + book["name"] + '</b> \n                                                         \u0418\u0437\u0434\u0430\u0442\u0435\u043B\u044C\u0441\u0442\u0432\u043E: ' + book["publishing"] + ' \n                                                         \u0413\u043E\u0434 \u0432\u044B\u043F\u0443\u0441\u043A\u0430: ' + book["year"] + ' \n                                                         ISBN: ' + book["isbn"] + ' \n                                                         \u041A\u043E\u043B-\u0432\u043E \u0441\u0442\u0440\u0430\u043D\u0438\u0446: ' + book["pages"]) + '</div>';
+	                            }
+	                        });
+	                    });
+	                } else {
+	                    rootDiv.innerHTML = "Отсутствуют";
+	                }
+
+	                if (idArray.length == 0) {
+	                    rootDiv.innerHTML = "Отсутствуют";
 	                }
 	            } catch (error) {
-	                Handsontable.renderers.TextRenderer.apply(this, arguments);
-	                return;
+	                rootDiv.innerHTML = "Отсутствуют";
 	            }
-
-	            idArray.forEach(function (element) {
-	                _this2.props.books.forEach(function (book) {
-	                    if (book["_id"] == element) {
-	                        var bookType = book["ebook"] ? "Электронная книга" : "Книга";
-	                        rootDiv.innerHTML += '<div class = "subCell">' + (bookType + ': <b>' + book["name"] + '</b> \n                                             \u0418\u0437\u0434\u0430\u0442\u0435\u043B\u044C\u0441\u0442\u0432\u043E: ' + book["publishing"] + ' \n                                             \u0413\u043E\u0434 \u0432\u044B\u043F\u0443\u0441\u043A\u0430: ' + book["year"] + ' \n                                             ISBN: ' + book["isbn"] + ' \n                                             \u041A\u043E\u043B-\u0432\u043E \u0441\u0442\u0440\u0430\u043D\u0438\u0446: ' + book["pages"]) + '</div>';
-	                    }
-	                });
-	            });
 
 	            Handsontable.Dom.empty(td);
 	            td.appendChild(rootDiv);
@@ -78164,17 +78170,23 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 463 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
 	});
+
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	exports.default = authorsState;
 
 	var _authors = __webpack_require__(457);
+
+	var _books = __webpack_require__(288);
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	var initialState = {
 	    authorsCollection: [{
@@ -78204,7 +78216,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        firstName: "ИмяЧетыре",
 	        birthDate: '04/04/2004',
 	        email: "example4@example.com",
-	        book: "Отсутствуют"
+	        book: "[]"
 	    }, {
 	        _id: 5,
 	        lastName: "ФамилияПять",
@@ -78225,21 +78237,21 @@ return /******/ (function(modules) { // webpackBootstrap
 	        firstName: "ИмяСемь",
 	        birthDate: '07/07/2007',
 	        email: "example7@example.com",
-	        book: "Отсутствуют"
+	        book: "[]"
 	    }, {
 	        _id: 8,
 	        lastName: "ФамилияВосемь",
 	        firstName: "ИмяВосемь",
 	        birthDate: '08/08/2008',
 	        email: "example8@example.com",
-	        book: "Отсутствуют"
+	        book: "[]"
 	    }, {
 	        _id: 9,
 	        lastName: "ФамилияДевять",
 	        firstName: "ИмяДевять",
 	        birthDate: '09/09/2009',
 	        email: "example9@example.com",
-	        book: "Отсутствуют"
+	        book: "[]"
 	    }, {
 	        _id: 10,
 	        lastName: "ФамилияДесять",
@@ -78253,14 +78265,14 @@ return /******/ (function(modules) { // webpackBootstrap
 	        firstName: "ИмяОдиннадцать",
 	        birthDate: '11/11/2011',
 	        email: "example11@example.com",
-	        book: "Отсутствуют"
+	        book: "[]"
 	    }, {
 	        _id: 12,
 	        lastName: "ФамилияДвенадцать",
 	        firstName: "ИмяДвенадцать",
 	        birthDate: '12/12/2012',
 	        email: "example12@example.com",
-	        book: "Отсутствуют"
+	        book: "[]"
 	    }],
 	    isDirty: false
 	};
@@ -78269,16 +78281,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	    var action = arguments[1];
 
-	    switch (action.type) {
-	        case _authors.SAVE_AUTHORS:
-	            return _extends({}, state, { authorsCollection: action.payload, isDirty: false });
+	    var _ret = function () {
+	        switch (action.type) {
+	            case _authors.SAVE_AUTHORS:
+	                return {
+	                    v: _extends({}, state, { authorsCollection: action.payload, isDirty: false })
+	                };
 
-	        case _authors.SET_AUTHOR_DIRTY:
-	            return _extends({}, state, { isDirty: action.payload });
+	            case _books.SAVE_BOOKS:
+	                var tempAuthorsCollection = [].concat(_toConsumableArray(state.authorsCollection));
+	                tempAuthorsCollection.forEach(function (author) {
+	                    author.book = [];
+	                });
 
-	        default:
-	            return state;
-	    }
+	                action.payload.forEach(function (book) {
+	                    try {
+	                        var authorsIds = JSON.parse(book.author);
+
+	                        if (authorsIds instanceof Array) {
+	                            authorsIds.forEach(function (authorId) {
+	                                tempAuthorsCollection.forEach(function (author) {
+	                                    if (author["_id"] == authorId) {
+	                                        author.book.push(book["_id"]);
+	                                    }
+	                                });
+	                            });
+	                        }
+	                    } catch (error) {
+	                        //do nothing
+	                    }
+	                });
+
+	                tempAuthorsCollection.forEach(function (author) {
+	                    author.book = "[" + author.book + "]";
+	                });
+
+	                return {
+	                    v: _extends({}, state, { authorsCollection: tempAuthorsCollection, isDirty: false })
+	                };
+
+	            case _authors.SET_AUTHOR_DIRTY:
+	                return {
+	                    v: _extends({}, state, { isDirty: action.payload })
+	                };
+
+	            default:
+	                return {
+	                    v: state
+	                };
+	        }
+	    }();
+
+	    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 	}
 
 /***/ },
@@ -78291,6 +78345,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    value: true
 	});
 
+	var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 	var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 	exports.default = booksState;
@@ -78298,6 +78354,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	var _books = __webpack_require__(288);
 
 	var _authors = __webpack_require__(457);
+
+	function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 	var initialState = {
 	    booksCollection: [{
@@ -78353,26 +78411,58 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : initialState;
 	    var action = arguments[1];
 
-	    switch (action.type) {
-	        case _books.SAVE_BOOKS:
-	            return _extends({}, state, { booksCollection: action.payload, isDirty: false });
+	    var _ret = function () {
+	        switch (action.type) {
+	            case _books.SAVE_BOOKS:
+	                return {
+	                    v: _extends({}, state, { booksCollection: action.payload, isDirty: false })
+	                };
 
-	        // case SAVE_AUTHORS:
-	        //     //action.payload
-	        //
-	        //     let tempBooksCollection = {...state.booksCollection};
-	        //     tempBooksCollection.forEach( (element) => {
-	        //
-	        //     });
-	        //
-	        //     return {...state, authorsCollection : action.payload, isDirty: false};
+	            case _authors.SAVE_AUTHORS:
+	                var tempBooksCollection = [].concat(_toConsumableArray(state.booksCollection));
+	                tempBooksCollection.forEach(function (book) {
+	                    book.author = [];
+	                });
 
-	        case _books.SET_BOOK_DIRTY:
-	            return _extends({}, state, { isDirty: action.payload });
+	                action.payload.forEach(function (author) {
+	                    try {
+	                        var booksIds = JSON.parse(author.book);
 
-	        default:
-	            return state;
-	    }
+	                        if (booksIds instanceof Array) {
+	                            booksIds.forEach(function (bookId) {
+	                                tempBooksCollection.forEach(function (book) {
+	                                    if (book["_id"] == bookId) {
+	                                        book.author.push(author["_id"]);
+	                                    }
+	                                });
+	                            });
+	                        }
+	                    } catch (error) {
+	                        //do nothing
+	                    }
+	                });
+
+	                tempBooksCollection.forEach(function (book) {
+	                    book.author = "[" + book.author + "]";
+	                });
+
+	                return {
+	                    v: _extends({}, state, { booksCollection: tempBooksCollection, isDirty: false })
+	                };
+
+	            case _books.SET_BOOK_DIRTY:
+	                return {
+	                    v: _extends({}, state, { isDirty: action.payload })
+	                };
+
+	            default:
+	                return {
+	                    v: state
+	                };
+	        }
+	    }();
+
+	    if ((typeof _ret === 'undefined' ? 'undefined' : _typeof(_ret)) === "object") return _ret.v;
 	}
 
 /***/ }

@@ -29,30 +29,34 @@ export default class Authors extends Component {
         try {
             idArray = JSON.parse(value);
 
-            if(!(idArray instanceof Array)) {
-                Handsontable.renderers.TextRenderer.apply(this, arguments);
-                return;
+            if(idArray instanceof Array) {
+
+                idArray.forEach((element) => {
+                    this.props.books.forEach((book) => {
+                        if (book["_id"] == element) {
+                            const bookType = ((book["ebook"]) ? "Электронная книга" : "Книга");
+                            rootDiv.innerHTML +=    `<div class = "subCell">` +
+                                                        `ID: ${book["_id"]}
+                                                         ${bookType}: <b>${book["name"]}</b> 
+                                                         Издательство: ${book["publishing"]} 
+                                                         Год выпуска: ${book["year"]} 
+                                                         ISBN: ${book["isbn"]} 
+                                                         Кол-во страниц: ${book["pages"]}` +
+                                                    `</div>`;
+                        }
+                    })
+                });
+            } else {
+                rootDiv.innerHTML = "Отсутствуют";
+            }
+
+            if( idArray.length == 0 ) {
+                rootDiv.innerHTML = "Отсутствуют";
             }
 
         } catch (error) {
-            Handsontable.renderers.TextRenderer.apply(this, arguments);
-            return;
+            rootDiv.innerHTML = "Отсутствуют";
         }
-
-        idArray.forEach( (element) => {
-            this.props.books.forEach( (book) => {
-                if(book["_id"] == element) {
-                    const bookType = ((book["ebook"]) ? "Электронная книга" : "Книга");
-                    rootDiv.innerHTML += `<div class = "subCell">` +
-                                            `${bookType}: <b>${book["name"]}</b> 
-                                             Издательство: ${book["publishing"]} 
-                                             Год выпуска: ${book["year"]} 
-                                             ISBN: ${book["isbn"]} 
-                                             Кол-во страниц: ${book["pages"]}` +
-                                         `</div>`;
-                }
-            })
-        });
 
         Handsontable.Dom.empty(td);
         td.appendChild(rootDiv);

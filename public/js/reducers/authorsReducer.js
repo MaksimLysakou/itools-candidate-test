@@ -1,4 +1,5 @@
 import { SAVE_AUTHORS, SET_AUTHOR_DIRTY } from '../constants/authors.js'
+import { SAVE_BOOKS } from '../constants/books.js'
 
 const initialState = {
     authorsCollection: [
@@ -32,7 +33,7 @@ const initialState = {
             firstName:"ИмяЧетыре",
             birthDate:'04/04/2004',
             email: "example4@example.com",
-            book: "Отсутствуют"
+            book: "[]"
         },
         {
             _id:5,
@@ -56,7 +57,7 @@ const initialState = {
             firstName:"ИмяСемь",
             birthDate:'07/07/2007',
             email: "example7@example.com",
-            book: "Отсутствуют"
+            book: "[]"
         },
         {
             _id:8,
@@ -64,7 +65,7 @@ const initialState = {
             firstName:"ИмяВосемь",
             birthDate:'08/08/2008',
             email: "example8@example.com",
-            book: "Отсутствуют"
+            book: "[]"
         },
         {
             _id:9,
@@ -72,7 +73,7 @@ const initialState = {
             firstName:"ИмяДевять",
             birthDate:'09/09/2009',
             email: "example9@example.com",
-            book: "Отсутствуют"
+            book: "[]"
         },
         {
             _id:10,
@@ -88,7 +89,7 @@ const initialState = {
             firstName:"ИмяОдиннадцать",
             birthDate:'11/11/2011',
             email: "example11@example.com",
-            book: "Отсутствуют"
+            book: "[]"
         },
         {
             _id:12,
@@ -96,7 +97,7 @@ const initialState = {
             firstName:"ИмяДвенадцать",
             birthDate:'12/12/2012',
             email: "example12@example.com",
-            book: "Отсутствуют"
+            book: "[]"
         }
        ],
         isDirty: false
@@ -106,6 +107,37 @@ export default function authorsState(state = initialState, action) {
     switch (action.type) {
         case SAVE_AUTHORS:
             return {...state, authorsCollection : action.payload, isDirty: false};
+
+        case SAVE_BOOKS:
+            let tempAuthorsCollection = [...state.authorsCollection];
+            tempAuthorsCollection.forEach( (author) => {
+                author.book = [];
+            });
+
+            action.payload.forEach( (book) => {
+                try {
+                    const authorsIds = JSON.parse(book.author);
+
+                    if(authorsIds instanceof Array) {
+                        authorsIds.forEach( (authorId) => {
+                            tempAuthorsCollection.forEach( (author) => {
+                                if(author["_id"] == authorId) {
+                                    author.book.push(book["_id"]);
+                                }
+                            });
+                        });
+                    }
+
+                } catch (error) {
+                    //do nothing
+                }
+            });
+
+            tempAuthorsCollection.forEach( (author) => {
+                author.book = "[" + author.book + "]";
+            });
+
+            return {...state, authorsCollection : tempAuthorsCollection, isDirty: false};
 
         case SET_AUTHOR_DIRTY:
             return {...state, isDirty: action.payload};
