@@ -47,7 +47,7 @@ export default class Books extends Component {
                 rootDiv.innerHTML = "Отсутствуют";
             }
 
-            if( idArray.length == 0 ) {
+            if( rootDiv.innerHTML == "" ) {
                 rootDiv.innerHTML = "Отсутствуют";
             }
 

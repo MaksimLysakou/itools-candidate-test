@@ -50,7 +50,7 @@ export default class Authors extends Component {
                 rootDiv.innerHTML = "Отсутствуют";
             }
 
-            if( idArray.length == 0 ) {
+            if( rootDiv.innerHTML == "" ) {
                 rootDiv.innerHTML = "Отсутствуют";
             }
 
