@@ -31,7 +31,13 @@ app.use(express.static(path.join(__dirname, '../public')));
 app.use('/api/authors', authors);
 app.use('/api/books', books);
 
-app.get('/*', function (req, res) {
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+app.get('/authors', function (req, res) {
+    res.sendFile(path.join(__dirname, '../public/index.html'));
+});
+app.get('/books', function (req, res) {
     res.sendFile(path.join(__dirname, '../public/index.html'));
 });
 
