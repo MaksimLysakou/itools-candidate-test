@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-const relationship = require("mongoose-relationship");
-const Book = require('./book.js');
 
 const Schema = mongoose.Schema;
 
