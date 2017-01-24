@@ -55,27 +55,10 @@ module.exports =  (function () {
 
         const query = { '_id' : id };
 
-        Author.update(query, author, (err, result) => {
+        Author.findOneAndUpdate(query, author, {new: true}, (err, result) => {
             callback && callback(err, result);
         });
     }
-
-    /**
-     * Edit author entity by id
-     * @param {Number} id - Unique author identifier
-     * @param {Object} author - New author entity
-     * @param {Function} callback - two params err, callback result
-     * @returns {void}
-     */
-    function editAuthor(id, author, callback) {
-
-        const query = { '_id' : id };
-
-        Author.update(query, author, (err, result) => {
-            callback && callback(err, result);
-        });
-    }
-
 
     /**
      * Remove author entity by id
@@ -86,7 +69,7 @@ module.exports =  (function () {
     function removeAuthor(id, callback) {
         const query = { '_id' : id };
 
-        Author.remove(query, (err, result) => {
+        Author.findOneAndRemove(query, (err, result) => {
             callback && callback(err, result);
         });
     }

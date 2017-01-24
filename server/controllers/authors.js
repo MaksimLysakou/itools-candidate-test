@@ -45,9 +45,22 @@ function getAuthorById(req, res) {
  */
 function updateAuthor(req, res) {
 
-    authorsDAO.updateAuthor( req.params.id, req.body.author, ( err, result) => {
+    if(!req.body.email) {
+        res.status(400).json({ errors: ["E-mail is require"] });
+        return;
+    }
 
-        if(err || !result) {
+    authorsDAO.updateAuthor( req.params.id, req.body, ( err, result) => {
+
+        if(err && err.code == 66) {
+            res.status(400)
+                .json({
+                    errors: ['Author with this id already exist']
+                });
+            return;
+        }
+
+        if(!result) {
             res.status(404)
                 .json({
                     errors: [ 'Author not exist' ]
@@ -56,6 +69,7 @@ function updateAuthor(req, res) {
             res.json({ author: result });
         }
     });
+
 }
 
 
@@ -66,7 +80,31 @@ function updateAuthor(req, res) {
  * @returns {void}
  */
 function editAuthor(req, res) {
+    if((req.body.email && req.body.email.length == 0) ||
+        (('email' in req.body) && !req.body.email)) {
+        res.status(400).json({ errors: ["E-mail is require"] });
+        return;
+    }
 
+    authorsDAO.updateAuthor( req.params.id, req.body, ( err, result) => {
+
+        if(err && err.code == 66) {
+            res.status(400)
+                .json({
+                    errors: ['Author with this id already exist']
+                });
+            return;
+        }
+
+        if(!result) {
+            res.status(404)
+                .json({
+                    errors: [ 'Author not exist' ]
+                });
+        } else {
+            res.json({ author: result });
+        }
+    });
 }
 
 
@@ -101,7 +139,19 @@ function addAuthor(req, res) {
  * @returns {void}
  */
 function removeAuthor(req, res) {
-
+    authorsDAO.removeAuthor(req.params.id, (err, result) => {
+        if(err) {
+            res.status(400).json("Error");
+        }
+        if(!result) {
+            res.status(404)
+                .json({
+                    errors: [ 'Author not exist' ]
+                });
+        } else {
+            res.json({ status: "OK" });
+        }
+    });
 }
 
 
