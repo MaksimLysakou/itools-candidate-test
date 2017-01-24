@@ -54,7 +54,7 @@ module.exports =  (function () {
     function updateBook(id, book, callback) {
         const query = { '_id' : id };
 
-        Book.update(query, book, (err, result) => {
+        Book.findOneAndUpdate(query, book, {new: true}, (err, result) => {
             callback && callback(err, result);
         });
     }

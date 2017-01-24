@@ -24,7 +24,15 @@ function getBooks(req, res) {
 function getBookById(req, res) {
 
     booksDAO.getBookById( req.params.id, ( err, result) => {
-        res.json(result);
+
+        if(err || !result) {
+            res.status(404)
+                .json({
+                    errors: [ 'Book not exist' ]
+                });
+        } else {
+            res.json(result);
+        }
     });
 }
 
@@ -36,9 +44,32 @@ function getBookById(req, res) {
  * @returns {void}
  */
 function updateBook(req, res) {
-    booksDAO.getBookById( req.params.id, ( err, result) => {
-        res.json(result);
+
+    if(!req.body.name) {
+        res.status(400).json({ errors: ["Name is require"] });
+        return;
+    }
+
+    booksDAO.updateBook( req.params.id, req.body, ( err, result) => {
+
+        if(err && err.code == 66) {
+            res.status(400)
+                .json({
+                    errors: ['Book with this id already exist']
+                });
+            return;
+        }
+
+        if(!result) {
+            res.status(404)
+                .json({
+                    errors: [ 'Book not exist' ]
+                });
+        } else {
+            res.json({ book: result });
+        }
     });
+
 }
 
 
@@ -49,7 +80,31 @@ function updateBook(req, res) {
  * @returns {void}
  */
 function editBook(req, res) {
+    if((req.body.email && req.body.email.length == 0) ||
+        (('name' in req.body) && !req.body.name)) {
+        res.status(400).json({ errors: ["Name is require"] });
+        return;
+    }
 
+    booksDAO.updateBook( req.params.id, req.body, ( err, result) => {
+
+        if(err && err.code == 66) {
+            res.status(400)
+                .json({
+                    errors: ['Book with this id already exist']
+                });
+            return;
+        }
+
+        if(!result) {
+            res.status(404)
+                .json({
+                    errors: [ 'Book not exist' ]
+                });
+        } else {
+            res.json({ book: result });
+        }
+    });
 }
 
 
@@ -60,10 +115,9 @@ function editBook(req, res) {
  * @returns {void}
  */
 function addBook(req, res) {
-
     if(!req.body.name) {
         res.status(400)
-           .json({ "errors" : ["Name is require"] });
+            .json({ "errors" : ["Name is require"] });
         return;
     }
 
@@ -85,12 +139,17 @@ function addBook(req, res) {
  * @returns {void}
  */
 function removeBook(req, res) {
-    booksDAO.removeBook( req.params.id, (err, result) => {
-        if(!err && result) {
-            res.json({ status : "OK" });
-        } else {
+    booksDAO.removeBook(req.params.id, (err, result) => {
+        if(err) {
+            res.status(400).json("Error");
+        }
+        if(!result) {
             res.status(404)
-               .json({ errors: ["Book not exist"] });
+                .json({
+                    errors: [ 'Book not exist' ]
+                });
+        } else {
+            res.json({ status: "OK" });
         }
     });
 }
