@@ -124,7 +124,7 @@ describe('Authors', function () {
             notValidAuthor2._id = '2';
             it('should update author', function (done) {
                 supertest(app)
-                    .put(`/api/authors/${dummyAuthor2}`)
+                    .put(`/api/authors/${dummyAuthor2._id}`)
                     .send(updatedAuthor)
                     .expect(200)
                     .end(function (err, res) {
@@ -196,7 +196,7 @@ describe('Authors', function () {
             };
             it('should update specific author filed/property', function (done) {
                 supertest(app)
-                    .patch(`/api/authors/${dummyAuthor2}`)
+                    .patch(`/api/authors/${dummyAuthor2._id}`)
                     .send(patchAuthor)
                     .expect(200)
                     .end(function (err, res) {

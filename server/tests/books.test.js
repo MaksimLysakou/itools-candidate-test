@@ -134,7 +134,7 @@ describe('Books', function () {
             notValidBook2._id = '2';
             it('should update book', function (done) {
                 supertest(app)
-                    .put(`/api/books/${dummyBook2}`)
+                    .put(`/api/books/${dummyBook2._id}`)
                     .send(updatedBook)
                     .expect(200)
                     .end(function (err, res) {
@@ -204,7 +204,7 @@ describe('Books', function () {
             };
             it('should update specific book filed/property', function (done) {
                 supertest(app)
-                    .patch(`/api/books/${dummyBook2}`)
+                    .patch(`/api/books/${dummyBook2._id}`)
                     .send(patchBook)
                     .expect(200)
                     .end(function (err, res) {
