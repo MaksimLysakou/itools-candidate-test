@@ -59,8 +59,8 @@ const initData = {
                             "1222",
                             "2222"
                         ],
-                        "birthDate" : new Date("December 01, 2001")
-                    },
+                        "birthDate" : new Date("December 01, 2001").getTime()
+},
                     {
                         "_id" : "2222",
                         "email" : "test2@example.com",
@@ -69,7 +69,7 @@ const initData = {
                         "book" : [
                             "2222"
                         ],
-                        "birthDate" : new Date("December 01, 2002")
+                        "birthDate" : new Date("December 01, 2002").getTime()
                     },
                     {
                         "_id" : "3222",
@@ -81,7 +81,7 @@ const initData = {
                             "2222",
                             "3222"
                         ],
-                        "birthDate" : new Date("December 01, 2003")
+                        "birthDate" : new Date("December 01, 2003").getTime()
                     },
                     {
                         "_id" : "4222",
@@ -92,7 +92,7 @@ const initData = {
                             "3222",
                             "2222"
                         ],
-                        "birthDate" : new Date("December 01, 2004")
+                        "birthDate" : new Date("December 01, 2004").getTime()
                     },
                     {
                         "_id" : "5222",
@@ -102,7 +102,7 @@ const initData = {
                         "book" : [
                             "4222"
                         ],
-                        "birthDate" : new Date("December 01, 2004")
+                        "birthDate" : new Date("December 01, 2005").getTime()
                     }
                 ]
             },
