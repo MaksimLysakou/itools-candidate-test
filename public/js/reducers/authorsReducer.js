@@ -1,7 +1,13 @@
-import { SAVE_AUTHORS, SET_AUTHOR_DIRTY } from '../constants/authors.js'
+import {
+            GET_AUTHORS_REQUEST,
+            GET_AUTHORS_SUCCESS,
+            SAVE_AUTHORS,
+            SET_AUTHOR_DIRTY
+       } from '../constants/authors.js'
 import { SAVE_BOOKS } from '../constants/books.js'
 
-const initialState = {
+const initialState = { authorsCollection: [], isDirty: false, fetching: false };
+    /*{
     authorsCollection: [
         {
             _id:1,
@@ -101,10 +107,17 @@ const initialState = {
         }
        ],
         isDirty: false
-    };
+    };*/
 
 export default function authorsState(state = initialState, action) {
     switch (action.type) {
+
+        case GET_AUTHORS_REQUEST:
+            return { ...state, authorsCollection: action.payload, fetching: true };
+
+        case GET_AUTHORS_SUCCESS:
+            return { ...state, authorsCollection: action.payload, fetching: false };
+
         case SAVE_AUTHORS:
             return {...state, authorsCollection : action.payload, isDirty: false};
 

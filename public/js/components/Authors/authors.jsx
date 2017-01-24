@@ -11,8 +11,8 @@ import HandsOnTable from '../../static/handsontable';
 import 'handsontable/dist/handsontable.full.css';
 
 export default class Authors extends Component {
+
     saveAuthors() {
-        console.log("Save button has been clicked!");
         this.props.saveAuthors(this.elements);
     }
 
@@ -20,6 +20,10 @@ export default class Authors extends Component {
         if(!this.props.isDirty) {
             this.props.setDirty(true);
         }
+    }
+
+    componentWillMount() {
+        this.props.getAuthors();
     }
 
     customRenderer(instance, td, row, col, prop, value, cellProperties) {
@@ -64,19 +68,19 @@ export default class Authors extends Component {
         return td;
     }
 
-
     render() {
 
         const vm = this;
-        const columnsHeaders = ['Фамилия', 'Имя', 'Дата рождения', 'Email', 'Книги'];
+        const columnsHeaders = ['Id', 'Фамилия', 'Имя', 'Дата рождения', 'Email', 'Книги'];
         const columnsType = [
             {
-                data: 'lastName'
-                //column is simple text, no special options here
+                data: '_id'
+            },
+            {
+                data: 'secondName'
             },
             {
                 data: 'firstName',
-                //column is simple text, no special options here
             },
             {
                 data: 'birthDate',
@@ -93,7 +97,6 @@ export default class Authors extends Component {
             },
             {
                 data: 'email',
-                //column is simple text, no special options here
             },
             {
                 data: 'book',
@@ -130,6 +133,7 @@ export default class Authors extends Component {
 }
 
 Authors.propTypes = {
+    getAuthors: PropTypes.func.isRequired,
     saveAuthors: PropTypes.func.isRequired,
     setDirty: PropTypes.func.isRequired,
     authors: PropTypes.array.isRequired,

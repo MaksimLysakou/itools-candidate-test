@@ -36,7 +36,7 @@ export default class Books extends Component {
                         if(author["_id"] == element) {
                             rootDiv.innerHTML +=    `<div class = "subCell">` +
                                                        `ID: ${author["_id"]}
-                                                        <b>${author["firstName"]} ${author["lastName"]}</b> 
+                                                        <b>${author["firstName"]} ${author["secondName"]}</b> 
                                                         Дата рождения: ${author["birthDate"]} 
                                                         Email: ${author["email"]}` +
                                                     `</div>`;
@@ -61,10 +61,17 @@ export default class Books extends Component {
         return td;
     }
 
+    componentWillMount() {
+        this.props.getBooks();
+    }
+
     render() {
         const vm = this;
-        const columnsHeaders = ['Название', 'Издательство', 'Эл. книга', 'Год', 'isbn', 'Страницы', 'Авторы'];
+        const columnsHeaders = ['Id', 'Название', 'Издательство', 'Эл. книга', 'Год', 'isbn', 'Страницы', 'Авторы'];
         const columnsType = [
+            {
+                data: '_id'
+            },
             {
                 data: 'name'
             },
