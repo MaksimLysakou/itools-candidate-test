@@ -345,7 +345,7 @@ describe('Books', function () {
         describe('DELETE /:id', function () {
             it('should delete book', function (done) {
                 supertest(app)
-                    .delete(`/api/books/${dummyBook2}`)
+                    .delete(`/api/books/${dummyBook2._id}`)
                     .expect(200)
                     .end(function (err, res) {
                         if (err) {
