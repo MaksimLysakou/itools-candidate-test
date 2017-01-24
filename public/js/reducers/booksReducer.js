@@ -13,6 +13,16 @@ const initialState = {
 
 function syncBooks(oldBooks, newBooks) {
 
+    function validateJSON(text) {
+        //Make JSON great again!
+
+        try {
+            return JSON.parse(text);;
+        } catch (error) {
+            return [];
+        }
+    }
+
     // Check for creating new book
     newBooks.forEach( (newBook) => {
         let isNew = true;
@@ -24,7 +34,14 @@ function syncBooks(oldBooks, newBooks) {
 
         if(isNew) {
             console.log("create");
-            const sentBook = {...newBook, author: JSON.parse(newBook.author)};
+            let sentBook = {};
+
+            if(sentBook.ebook == undefined) {
+                sentBook = {...newBook, author: validateJSON(newBook.author), ebook: false};
+            } else {
+                sentBook = {...newBook, author: validateJSON(newBook.author)};
+            }
+
             fetch('/api/books', {
                 method: 'post',
                 headers: {
@@ -56,8 +73,40 @@ function syncBooks(oldBooks, newBooks) {
         }
     });
 
-    // TODO: remove empty rows from the model
+    oldBooks.forEach( (oldBook) => {
+        let isRemoved = true;
+        newBooks.forEach((newBook) => {
+            if (newBook["_id"] == oldBook["_id"]) {
+                if(JSON.stringify(newBook) != JSON.stringify(oldBook)) {
 
+                    let sentBook = {};
+
+                    if(sentBook.ebook == undefined) {
+                        sentBook = {...newBook, author: validateJSON(newBook.author), ebook: false};
+                    } else {
+                        sentBook = {...newBook, author: validateJSON(newBook.author)};
+                    }
+
+                    fetch('/api/books/' + sentBook["_id"], {
+                        method: 'put',
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8"
+                        },
+                        body: JSON.stringify(sentBook)
+                    });
+                }
+            }
+        });
+    });
+
+    let tempBooks = [];
+    newBooks.forEach( (element) => {
+       if(element["_id"] && element["_id"].length > 0) {
+           tempBooks.push(element);
+       }
+    });
+
+    return tempBooks;
 }
 
 export default function booksState(state = initialState, action) {
@@ -71,11 +120,10 @@ export default function booksState(state = initialState, action) {
             return { ...state, booksCollection: action.payload, fetching: false };
 
         case SAVE_BOOKS:
-            syncBooks(state.booksCollection, action.payload);
-            return {...state, booksCollection : action.payload, isDirty: false};
+            return {...state, booksCollection : syncBooks(state.booksCollection, action.payload), isDirty: false};
 
         case SAVE_AUTHORS:
-            let tempBooksCollection = [...state.booksCollection];
+            let tempBooksCollection = JSON.parse(JSON.stringify(state.booksCollection));
             tempBooksCollection.forEach( (book) => {
                book.author = [];
             });
@@ -103,8 +151,7 @@ export default function booksState(state = initialState, action) {
                 book.author = "[" + book.author + "]";
             });
 
-            syncBooks(state.booksCollection, tempBooksCollection);
-            return {...state, booksCollection : tempBooksCollection, isDirty: false};
+            return {...state, booksCollection : syncBooks(state.booksCollection, tempBooksCollection), isDirty: false};
 
         case SET_BOOK_DIRTY:
             return {...state, isDirty: action.payload};

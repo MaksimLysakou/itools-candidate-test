@@ -109,6 +109,107 @@ const initialState = { authorsCollection: [], isDirty: false, fetching: false };
         isDirty: false
     };*/
 
+function syncAuthors(oldAuthors, newAuthors) {
+
+    function validateJSON(text) {
+        //Make JSON great again!
+
+        try {
+            return JSON.parse(text);;
+        } catch (error) {
+            return [];
+        }
+    }
+
+    function parseDate(date) {
+
+        let dateParts = date.split("/");
+
+        return new Date(dateParts[2], (dateParts[1] - 1), dateParts[0]);
+    }
+
+    // Check for creating new book
+    newAuthors.forEach( (newAuthor) => {
+        let isNew = true;
+        oldAuthors.forEach( (oldAuthor) => {
+            if(newAuthor["_id"] == oldAuthor["_id"] || !newAuthor["_id"]) {
+                isNew = false;
+            }
+        });
+
+        if(isNew) {
+            console.log("create");
+            let sentAuthor = {};
+
+            console.log(newAuthor.birthDate);
+            console.log(parseDate(newAuthor.birthDate));
+            console.log((parseDate(newAuthor.birthDate)).getTime());
+
+            sentAuthor = {...newAuthor, book: validateJSON(newAuthor.book), birthDate: (parseDate(newAuthor.birthDate)).getTime()};
+
+            fetch('/api/authors', {
+                method: 'post',
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                },
+                body: JSON.stringify(sentAuthor)
+            });
+        }
+    });
+
+    // Check for deleting old book
+    oldAuthors.forEach( (oldAuthor) => {
+        let isRemoved = true;
+        newAuthors.forEach( (newAuthor) => {
+            if(newAuthor["_id"] == oldAuthor["_id"]) {
+                isRemoved = false;
+            }
+        });
+
+        console.log("remove");
+        if(isRemoved) {
+            fetch('/api/authors/' + oldAuthor["_id"], {
+                method: 'delete',
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                },
+                body: JSON.stringify(oldAuthor)
+            });
+        }
+    });
+
+    oldAuthors.forEach( (oldAuthor) => {
+        let isRemoved = true;
+        newAuthors.forEach((newAuthor) => {
+            if (newAuthor["_id"] == oldAuthor["_id"]) {
+                if(JSON.stringify(newAuthor) != JSON.stringify(oldAuthor)) {
+
+                    let sentAuthor = {};
+
+                    sentAuthor = {...newAuthor, book: validateJSON(newAuthor.book), birthDate: (parseDate(newAuthor.birthDate)).getTime()};
+
+                    fetch('/api/authors/' + sentAuthor["_id"], {
+                        method: 'put',
+                        headers: {
+                            "Content-type": "application/json; charset=UTF-8"
+                        },
+                        body: JSON.stringify(sentAuthor)
+                    });
+                }
+            }
+        });
+    });
+
+    let tempAuthors = [];
+    newAuthors.forEach( (element) => {
+        if(element["_id"] && element["_id"].length > 0) {
+            tempAuthors.push(element);
+        }
+    });
+
+    return tempAuthors;
+}
+
 export default function authorsState(state = initialState, action) {
     switch (action.type) {
 
@@ -119,10 +220,10 @@ export default function authorsState(state = initialState, action) {
             return { ...state, authorsCollection: action.payload, fetching: false };
 
         case SAVE_AUTHORS:
-            return {...state, authorsCollection : action.payload, isDirty: false};
+            return {...state, authorsCollection : syncAuthors(state.authorsCollection, action.payload), isDirty: false};
 
         case SAVE_BOOKS:
-            let tempAuthorsCollection = [...state.authorsCollection];
+            let tempAuthorsCollection = JSON.parse(JSON.stringify(state.authorsCollection));
             tempAuthorsCollection.forEach( (author) => {
                 author.book = [];
             });
@@ -150,7 +251,7 @@ export default function authorsState(state = initialState, action) {
                 author.book = "[" + author.book + "]";
             });
 
-            return {...state, authorsCollection : tempAuthorsCollection, isDirty: false};
+            return {...state, authorsCollection : syncAuthors(state.authorsCollection, tempAuthorsCollection), isDirty: false};
 
         case SET_AUTHOR_DIRTY:
             return {...state, isDirty: action.payload};
