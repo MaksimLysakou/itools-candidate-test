@@ -10,7 +10,7 @@ const booksDAO = require('../dao/book');
 function getBooks(req, res) {
 
     booksDAO.getBooks( (err, result) => {
-        res.json(result);
+        res.json({ books: result });
     });
 }
 
@@ -31,7 +31,7 @@ function getBookById(req, res) {
                     errors: [ 'Book not exist' ]
                 });
         } else {
-            res.json(result);
+            res.json({ book: result });
         }
     });
 }

@@ -10,7 +10,7 @@ const authorsDAO = require('../dao/author');
 function getAuthors(req, res) {
 
     authorsDAO.getAuthors( (err, result) => {
-        res.json(result);
+        res.json({ authors: result });
     });
 }
 
@@ -31,7 +31,7 @@ function getAuthorById(req, res) {
                     errors: [ 'Author not exist' ]
                 });
         } else {
-            res.json(result);
+            res.json({ author: result });
         }
     });
 }
