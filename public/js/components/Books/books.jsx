@@ -62,6 +62,7 @@ export default class Books extends Component {
     }
 
     componentWillMount() {
+        this.props.getAuthors();
         this.props.getBooks();
     }
 
@@ -127,6 +128,8 @@ export default class Books extends Component {
 }
 
 Books.propTypes = {
+    getBooks: PropTypes.func.isRequired,
+    getAuthors: PropTypes.func.isRequired,
     saveBooks: PropTypes.func.isRequired,
     setDirty: PropTypes.func.isRequired,
     authors: PropTypes.array.isRequired,
