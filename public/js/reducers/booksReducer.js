@@ -11,6 +11,54 @@ const initialState = {
         isDirty: false
     };
 
+function syncBooks(oldBooks, newBooks) {
+
+    // Check for creating new book
+    newBooks.forEach( (newBook) => {
+        let isNew = true;
+        oldBooks.forEach( (oldBook) => {
+            if(newBook["_id"] == oldBook["_id"] || !newBook["_id"]) {
+                isNew = false;
+            }
+        });
+
+        if(isNew) {
+            console.log("create");
+            const sentBook = {...newBook, author: JSON.parse(newBook.author)};
+            fetch('/api/books', {
+                method: 'post',
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                },
+                body: JSON.stringify(sentBook)
+            });
+        }
+    });
+
+    // Check for deleting old book
+    oldBooks.forEach( (oldBook) => {
+        let isRemoved = true;
+        newBooks.forEach( (newBook) => {
+            if(newBook["_id"] == oldBook["_id"]) {
+                isRemoved = false;
+            }
+        });
+
+        console.log("remove");
+        if(isRemoved) {
+            fetch('/api/books/' + oldBook["_id"], {
+                method: 'delete',
+                headers: {
+                    "Content-type": "application/json; charset=UTF-8"
+                },
+                body: JSON.stringify(oldBook)
+            });
+        }
+    });
+
+    // TODO: remove empty rows from the model
+
+}
 
 export default function booksState(state = initialState, action) {
 
@@ -23,6 +71,7 @@ export default function booksState(state = initialState, action) {
             return { ...state, booksCollection: action.payload, fetching: false };
 
         case SAVE_BOOKS:
+            syncBooks(state.booksCollection, action.payload);
             return {...state, booksCollection : action.payload, isDirty: false};
 
         case SAVE_AUTHORS:
@@ -54,6 +103,7 @@ export default function booksState(state = initialState, action) {
                 book.author = "[" + book.author + "]";
             });
 
+            syncBooks(state.booksCollection, tempBooksCollection);
             return {...state, booksCollection : tempBooksCollection, isDirty: false};
 
         case SET_BOOK_DIRTY:
