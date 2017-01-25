@@ -65,14 +65,14 @@ DAO.prototype.init = function (data, callback) {
         if (data.collections instanceof Array) {
 
             data.collections.forEach(function (element, index) {
-                vm.connection.collection(element.name).insert(element.rows, function (err) {
+                vm.connection.collection(element.name).insert(element.rows, (err) => {
                     err && console.error(`[ERROR]: Error during inserting ${element.rows.length} elements to ${element.name} collection`);
                     DEBUG && !err && console.log(`[INFO] : Success inserting ${element.rows.length} elements to ${element.name} collection`);
-                });
 
-                if(index === data.collections.length - 1){
-                    callback && callback();
-                }
+                    if(index === data.collections.length - 1){
+                        callback && callback();
+                    }
+                });
             });
         }
     });
@@ -91,10 +91,13 @@ function clearAuthors(callback) {
                 vm.connection.collection('authors').drop( function(err) {
                     DEBUG && err && console.error(`[ERROR]: Error during dropping authors collection: ${err}`);
                     DEBUG && !err && console.log(`[INFO] : Success dropping authors collection`);
+
+                    callback && callback();
                 });
             }
-
-            callback && callback();
+            else {
+                callback && callback();
+            }
         });
 }
 
@@ -111,10 +114,14 @@ function clearBooks(callback) {
                 vm.connection.collection('books').drop(function (err) {
                     DEBUG && err && console.error(`[ERROR]: Error during dropping books collection: ${err}`);
                     DEBUG && !err && console.log(`[INFO] : Success dropping books collection`);
+
+                    callback && callback();
                 });
             }
+            else {
+                callback && callback();
+            }
 
-            callback && callback();
         });
 }
 
